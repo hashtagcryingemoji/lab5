@@ -1,17 +1,20 @@
 package ui
 
-import application.CliPort
+import application.IOPort
 import java.util.Scanner
 
-class CliManager: CliPort {
+class CliManager: IOPort {
     private val scanner = Scanner(System.`in`)
 
-    override fun userOutput(message: String) {
-        print(message)
+    override fun printLine(message: Any?) {
+        println(message)
     }
 
-    override fun userInput(): String {
-        val text = scanner.next()
-        return text
+    override fun printError(message: Any?) {
+        println("Error: $message")
+    }
+
+    override fun readLine(): String? {
+        return if (scanner.hasNextLine()) scanner.nextLine() else null
     }
 }
