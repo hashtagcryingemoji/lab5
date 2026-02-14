@@ -1,5 +1,7 @@
 plugins {
-    kotlin("jvm") version "1.9.20"
+    kotlin("jvm") version "2.0.0"
+    kotlin("plugin.serialization") version "2.0.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     application
 }
 
@@ -13,6 +15,8 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation(kotlin("stdlib-jdk8"))
+    implementation("io.github.pdvrieze.xmlutil:core:0.90.0")
+    implementation("io.github.pdvrieze.xmlutil:serialization:0.90.0")
 }
 
 application {
@@ -21,4 +25,8 @@ application {
 
 kotlin {
     jvmToolchain(17)
+}
+
+tasks.register("helloTask"){
+    println("hello")
 }
