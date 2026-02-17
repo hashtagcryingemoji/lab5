@@ -4,20 +4,25 @@ import domain.Address
 import domain.Coordinates
 import domain.Organization
 import domain.OrganizationType
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.time.LocalDate
 
+@Serializable
+@XmlSerialName("organization", "", "")
 data class OrganizationDTO(
-    val id: Int,
-    val name: String,
-    val coordinatesX: Float,
-    val coordinatesY: Float,
-    val creationDate: String,
-    val annualTurnover: Float,
-    val fullName: String,
-    val employeesCount: Long?,
-    val organizationType: String,
-    val street: String?,
-    val zipCode: String?
+    @XmlElement val id: Int,
+    @XmlElement val name: String,
+    @XmlElement val coordinatesX: Float,
+    @XmlElement val coordinatesY: Float,
+    @XmlElement val creationDate: String,
+    @XmlElement val annualTurnover: Float,
+    @XmlElement val fullName: String,
+    @XmlElement val employeesCount: Long?,
+    @XmlElement val organizationType: String,
+    @XmlElement val street: String?,
+    @XmlElement val zipCode: String?
 ){
     companion object {
         fun toDto(org: Organization): OrganizationDTO{
