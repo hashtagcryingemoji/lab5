@@ -20,6 +20,6 @@ data class Organization (
         if (employeesCount != null ) require(employeesCount > 0) { "Значение поля должно быть больше 0" }
     }
     override fun compareTo(other: Organization): Int {
-        return id.compareTo(other.id)
+        return this.name.compareTo(other.name)
     }
 }
