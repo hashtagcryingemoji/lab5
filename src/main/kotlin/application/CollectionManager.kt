@@ -4,21 +4,24 @@ import domain.Address
 import domain.Organization
 import domain.OrganizationRepository
 import domain.OrganizationType
-import java.util.Deque
 
 class CollectionManager(
     private val organizationCollection : ArrayDeque<Organization>,
-    private var currentID: Int = -1
 ) : OrganizationRepository {
+
+    private var currentID: Int = -1
 
     fun generateNewID() : Int{
         if (currentID == -1) {
-            if (organizationCollection.isEmpty()) {currentID = 1; return 1}
+            if (organizationCollection.isEmpty()) {
+                currentID = 1
+                return 1
+            }
             val maxID = organizationCollection.maxOf { it.id }
             currentID = maxID + 1
+
             return maxID + 1
         }
-
         return currentID+1
     }
 
