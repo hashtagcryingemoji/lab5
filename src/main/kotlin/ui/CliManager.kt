@@ -14,7 +14,7 @@ class CliManager: IOPort {
         println("Error: $message")
     }
 
-    override fun readLine(): String? {
-        return if (scanner.hasNextLine()) scanner.nextLine() else null
+    override fun readLine(): String {
+        return scanner.nextLine()
     }
 }

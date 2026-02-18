@@ -8,10 +8,10 @@ class ScriptManager(
     private val fileName: String
 ): IOPort by userOutput {
 
-    override fun readLine(): String? {
+    override fun readLine(): String {
         val file = File(fileName)
         val sc = Scanner(file)
 
-        return if (sc.hasNextLine()) sc.nextLine() else null
+        return sc.nextLine()
     }
 }
