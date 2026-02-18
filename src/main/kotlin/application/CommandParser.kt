@@ -57,7 +57,7 @@ class CommandParser(private val io: IOPort) {
         var s = readString(p, nullable)
         if (s != null) {
             val numL: Long? = s.toLongOrNull()
-            if (numL != null) return numL
+            return if (numL != null) numL
             else {
                 io.printError("Это не число! Попробуйте ещё раз:")
                 return readLong(p, nullable)
@@ -70,12 +70,13 @@ class CommandParser(private val io: IOPort) {
         var s = readString(p, nullable)
         if (s != null) {
             val numF: Float? = s.toFloatOrNull()
-            if (numF != null) {
+            return if (numF != null) {
                 if (numF > 547F) {
                     io.printError("Число больше 547! Попробуйте другое:")
                     return readFloat(p, nullable)
                 }
-                return numF
+                numF
+
             }
             else {
                 io.printError("Это не число! Попробуйте ещё раз:")
