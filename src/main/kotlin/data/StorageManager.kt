@@ -33,16 +33,10 @@ class StorageManager: StorageGateway {
             .toList()
         val container = OrganizationsContainer(list)
         val xml = XML { indentString = "    " }
+        val content = xml.encodeToString(OrganizationsContainer.serializer(), container)
+        val fileWriter = FileWriter(file)
 
-        try {
-            val content = xml.encodeToString(OrganizationsContainer.serializer(), container)
-            val fileWriter = FileWriter(file)
-
-            fileWriter.write(content)
-
-        }
-        catch (e: IOException) {
-            TODO("add ioexception handle")
-        }
+        fileWriter.write(content)
+        fileWriter.flush()
     }
 }
