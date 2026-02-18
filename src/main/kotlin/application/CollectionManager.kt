@@ -25,6 +25,8 @@ class CollectionManager(
         return currentID+1
     }
 
+    fun checkFullNameUnique(fullName: String) : Boolean = organizationCollection.find { it.fullName == fullName } != null
+
     fun clear() {
         organizationCollection.clear()
         currentID = -1
