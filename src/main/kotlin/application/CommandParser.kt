@@ -6,20 +6,21 @@ import java.util.Locale.getDefault
 class CommandParser(private val io: IOPort) {
     fun readOrganization(collectionManager: CollectionManager): Organization {
         val id = collectionManager.generateNewID()
-        val name = readString("Введите имя", false)!!
-        val x = readFloat("X (max 547)", true)!!
-        val y = readFloat("Y", true)!!
-        val turnover: Float = readFloat("Оборот (>0)", false)!!
+        val name = readName("Введите название организации:", false)
+        val x = readFloatMax("X (max 547)", 547f, false)!!
+        val y = readFloat("Y", false)!!
+        val turnover: Float = readFloatMin("Оборот (>0)",0f, false)!!
         var fullName: String
 
         while (true) {
             fullName = readString("Полное имя (уникальное)", false)!!
-            if (collectionManager.checkFullNameUnique(fullName)) break
-            io.printError("Это имя уже занято.")
+            if (!collectionManager.checkFullNameUnique(fullName)) break
+            io.printLine("Это имя уже занято.")
+
         }
 
-        val empCount = readLong("Сотрудники", nullable = true)
-        val type = readEnum("Тип", false)
+        val empCount = readLongMin("Сотрудники",0L, nullable = true)
+        val type = readEnum("Тип (commercial, public, government, private limited company, open joint stock company", false)
         val street = readString("Улица", true)
         val zip = readString("Индекс", true)
 
@@ -48,48 +49,107 @@ class CommandParser(private val io: IOPort) {
 
                 val s: String = io.readLine().trim()
                 if (s.isEmpty()) return null
+                return s
             }
 
         }
     }
-
+    private fun readName(p: String, nullable: Boolean): String {
+        var s = readString(p, nullable)
+        return if (s != "" && s != null) s.trim()
+        else {
+            io.printLine("Название не может быть пустым. Попробуйте ещё раз:")
+            readName(p, nullable)
+        }
+    }
     private fun readLong(p: String, nullable: Boolean): Long? {
         var s = readString(p, nullable)
         if (s != null) {
-            val numL: Long? = s.toLongOrNull()
-            return if (numL != null) numL
+            val parsed_Long: Long? = s.toLongOrNull()
+            return if (parsed_Long != null) parsed_Long
             else {
-                io.printError("Это не число! Попробуйте ещё раз:")
-                return readLong(p, nullable)
+                io.printLine("Это не число! Попробуйте ещё раз:")
+                readLong(p, nullable)
             }
         }
         return null
     }
 
+    //Нижняя граница
+    private fun readLongMin(p: String, min: Long, nullable: Boolean): Long? {
+        var s = readString(p, nullable)
+        if (s != null) {
+            val parsed_Long: Long? = s.toLongOrNull()
+            return if (parsed_Long != null)
+                if (parsed_Long > min) parsed_Long
+                else {
+                    io.printLine("Количество сотрудников должно быть больше 0. Попробуйте еще раз")
+                    readLongMin(p, min, nullable)
+                }
+            else {
+                io.printLine("Это не число! Попробуйте ещё раз:")
+                readLong(p, nullable)
+            }
+        }
+        return null
+    }
+
+
     private fun readFloat(p: String, nullable: Boolean): Float? {
         var s = readString(p, nullable)
         if (s != null) {
-            val numF: Float? = s.toFloatOrNull()
-            return if (numF != null) {
-                if (numF > 547F) {
-                    io.printError("Число больше 547! Попробуйте другое:")
-                    return readFloat(p, nullable)
-                }
-                numF
-
-            }
+            val parsed_Float: Float? = s.toFloatOrNull()
+             return if (parsed_Float != null) parsed_Float
             else {
-                io.printError("Это не число! Попробуйте ещё раз:")
+                io.printLine("Это не число! Попробуйте ещё раз:")
                 return readFloat(p, nullable)
             }
         }
         return null
     }
+    //Только верхняя граница
+    private fun readFloatMax(p: String, max: Float, nullable: Boolean): Float? {
+        var s = readString(p, nullable)
+        if (s != null) {
+            val parsed_Float: Float? = s.toFloatOrNull()
+            return if (parsed_Float != null) {
+                if (parsed_Float > max) {
+                    io.printLine("Число больше $max! Попробуйте другое:")
+                    readFloatMax(p, max, nullable)
+                }
+                parsed_Float
+            }
+            else {
+                io.printLine("Это не число! Попробуйте ещё раз:")
+                return readFloatMax(p, max, nullable)
+            }
+        }
+        return null
+    }
+    //Только нижняя граница
+    private fun readFloatMin(p: String, min: Float, nullable: Boolean): Float? {
+        var s = readString(p, nullable)
+        if (s != null) {
+            val parsed_Float: Float? = s.toFloatOrNull()
+            return if (parsed_Float != null) {
+                if (parsed_Float < min) {
+                    io.printLine("Число меньше $min! Попробуйте другое:")
+                    readFloatMin(p, min, nullable)
+                }
+                parsed_Float
 
+            }
+            else {
+                io.printLine("Это не число! Попробуйте ещё раз:")
+                return readFloatMin(p, min,  nullable)
+            }
+        }
+        return null
+    }
     private fun readEnum(p: String, nullable: Boolean): OrganizationType {
 
         val s: String = readString(p, nullable)!!
-        when (s.lowercase(getDefault())) {
+        return when (s.lowercase()) {
             "commercial" -> OrganizationType.COMMERCIAL
             "public" -> OrganizationType.PUBLIC
             "government" -> OrganizationType.GOVERNMENT
@@ -97,11 +157,9 @@ class CommandParser(private val io: IOPort) {
             "open joint stock company" -> OrganizationType.OPEN_JOINT_STOCK_COMPANY
             else -> {
                 io.printLine("Попробуйте еще раз:")
-                return readEnum(p, nullable)
+                readEnum(p, nullable)
             }
         }
-        io.printLine("Попробуйте еще раз:")
-        return readEnum(p, nullable)
     }
 
 }
