@@ -8,7 +8,7 @@ class ScriptManager {
 
     fun addToStack(path: String) = st.addLast(ScriptParser(path))
 
-    fun getCommand(): String{
+    fun getLine(): String{
         if (st.isEmpty()) throw EOFException()
 
         val lastScript = st.last()
@@ -17,7 +17,7 @@ class ScriptManager {
         if (lastScript.isDone()){
             st.last().closeScanner()
             st.removeLast()
-            res = getCommand()
+            res = getLine()
         }
         else {
             res = lastScript.getLine()!!
