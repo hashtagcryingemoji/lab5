@@ -6,7 +6,7 @@ import kotlin.collections.ArrayDeque
 class ScriptManager {
     private val st = ArrayDeque<ScriptParser>()
 
-    fun addToStack(scriptParser: ScriptParser) = st.addLast(scriptParser)
+    fun addToStack(path: String) = st.addLast(ScriptParser(path))
 
     fun getCommand(): String{
         if (st.isEmpty()) throw EOFException()
