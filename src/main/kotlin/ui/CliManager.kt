@@ -10,10 +10,6 @@ class CliManager: IOPort {
         println(message)
     }
 
-    override fun printError(message: Any?) {
-        println("Error: $message")
-    }
-
     override fun readLine(): String {
         return scanner.nextLine()
     }
