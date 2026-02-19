@@ -5,6 +5,6 @@ data class Coordinates (
     val y: Float
 ){
     init {
-        require(x <= 547) { "Поле x должно быть меньше 547" }
+        require(x <= 547f) { "Поле x должно быть меньше 547" }
     }
 }
