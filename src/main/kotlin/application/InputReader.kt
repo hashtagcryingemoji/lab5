@@ -37,7 +37,7 @@ class InputReader(val app: Handler) {
         )
     }
 
-    private fun readString(p: String, nullable: Boolean): String? {
+    fun readString(p: String, nullable: Boolean): String? {
         if (!nullable) {
             while (true) {
                 printLine("$p: ")
@@ -64,7 +64,7 @@ class InputReader(val app: Handler) {
     }
 
     private fun readLong(p: String, nullable: Boolean): Long? {
-        var s = readString(p, nullable)
+        val s = readString(p, nullable)
         if (s != null) {
             val parsedLong: Long? = s.toLongOrNull()
             return if (parsedLong != null) parsedLong
@@ -78,7 +78,7 @@ class InputReader(val app: Handler) {
 
     //Нижняя граница
     private fun readLongMin(p: String, nullable: Boolean, min: Long): Long? {
-        var parsedLong = readLong(p, nullable)
+        val parsedLong = readLong(p, nullable)
         return if (parsedLong != null && parsedLong >= min) parsedLong
         else if (parsedLong != null) {
             handleError(WrongArgumentException("Число $parsedLong больше возможного."))
@@ -87,8 +87,8 @@ class InputReader(val app: Handler) {
         else null
     }
 
-private fun readFloat(p: String, nullable: Boolean): Float? {
-        var s = readString(p, nullable)
+    private fun readFloat(p: String, nullable: Boolean): Float? {
+        val s = readString(p, nullable)
         if (s != null) {
             val parsedFloat: Float? = s.toFloatOrNull()
              return if (parsedFloat != null) parsedFloat
@@ -101,7 +101,7 @@ private fun readFloat(p: String, nullable: Boolean): Float? {
     }
     //Только верхняя граница
     private fun readFloatMax(p: String , nullable: Boolean, max: Float): Float? {
-        var parsedFloat = readFloat(p, nullable)
+        val parsedFloat = readFloat(p, nullable)
             return if (parsedFloat != null && parsedFloat <= max) parsedFloat
             else if (parsedFloat != null) {
                 handleError(WrongArgumentException("Число $parsedFloat больше возможного."))
@@ -111,7 +111,7 @@ private fun readFloat(p: String, nullable: Boolean): Float? {
     }
     //Только нижняя граница
     private fun readFloatMin(p: String, nullable: Boolean, min: Float): Float? {
-        var parsedFloat = readFloat(p, nullable)
+        val parsedFloat = readFloat(p, nullable)
         return if (parsedFloat != null && parsedFloat >= min) parsedFloat
         else if (parsedFloat != null) {
             handleError(WrongArgumentException("Число $parsedFloat меньше возможного."))
