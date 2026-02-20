@@ -9,7 +9,7 @@ class CollectionManager(
     private val organizationCollection : ArrayDeque<Organization>,
 ) : OrganizationRepository {
 
-    private var currentID: Int = 0
+    private var currentID: Int = if (organizationCollection.isNotEmpty()) organizationCollection.maxOf { it.id } else 0
 
     fun generateNewID() : Int{
         return ++currentID
