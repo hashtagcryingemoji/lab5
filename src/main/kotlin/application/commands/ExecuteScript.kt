@@ -5,7 +5,7 @@ import application.ScriptExecutor
 import application.exceptions.EmptyArgumentException
 
 class ExecuteScript(
-    val app: Handler
+    override val app: Handler
 ): Command {
     override val name = "execute_script"
     override val description = "Исполняет скрипты"
