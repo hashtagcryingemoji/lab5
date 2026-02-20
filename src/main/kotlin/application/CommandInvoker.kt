@@ -19,7 +19,7 @@ class CommandInvoker(val app: Handler) {
             command.execute(argument)
 
         } else {
-            app.io.printLine("Команда '$commandName' не найдена. Введите 'help, чтобы ознакомиться со списком доступных команд.")
+            app.io.printLine("Команда '$commandName' не найдена. Введите 'help', чтобы ознакомиться со списком доступных команд.")
         }
     }
 
