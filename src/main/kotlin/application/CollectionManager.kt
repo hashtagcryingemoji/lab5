@@ -19,7 +19,7 @@ class CollectionManager(
 
     fun clear() {
         organizationCollection.clear()
-        currentID = -1
+        currentID = 0
     }
     fun getCollection() : List<Organization> = organizationCollection.toList()
 
