@@ -10,7 +10,12 @@ class CliManager: IOPort {
         println(message)
     }
 
-    override fun readLine(): String {
-        return scanner.nextLine()
+    override fun readLine(): String? {
+        return if (scanner.hasNextLine()) scanner.nextLine()
+        else {
+            scanner.close()
+            null
+        }
+
     }
 }
