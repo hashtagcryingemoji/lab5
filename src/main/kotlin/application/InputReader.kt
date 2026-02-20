@@ -21,7 +21,6 @@ class InputReader(val app: Handler) {
             fullName = readString("Полное имя (уникальное)", false)!!
             if (!collectionManager.checkFullNameUnique(fullName) && fullName.isNotBlank()) break
             handleError(WrongArgumentException("Это имя уже занято."))
-
         }
 
         val empCount = readLongMin("Сотрудники",true, 0L)

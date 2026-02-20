@@ -12,7 +12,7 @@ class ScriptExecutor(
     }
     override val io = ScriptReader(pathName)
     override val collectionManager = app.collectionManager
-    override val invoker: CommandInvoker = CommandInvoker(io)
+    override val invoker: CommandInvoker = CommandInvoker(this)
     override val inputReader: InputReader = InputReader(this)
 
     override fun handleError(e: Exception) {

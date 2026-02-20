@@ -2,7 +2,7 @@ package application
 
 import application.commands.Command
 
-class CommandInvoker(private val ioPort: IOPort) {
+class CommandInvoker(val app: Handler) {
     private val commands = mutableMapOf<String, Command>()
 
     fun registerCommand(command: Command) {
@@ -19,8 +19,7 @@ class CommandInvoker(private val ioPort: IOPort) {
             command.execute(argument)
 
         } else {
-            ioPort.printLine("Команда '$commandName' не найдена. Введите 'help, чтобы ознакомиться со списком доступных команд.")
-
+            app.io.printLine("Команда '$commandName' не найдена. Введите 'help, чтобы ознакомиться со списком доступных команд.")
         }
     }
 

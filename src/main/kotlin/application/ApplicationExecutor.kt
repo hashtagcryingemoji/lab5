@@ -10,7 +10,7 @@ class ApplicationExecutor(
     override val io: IOPort,
     override val collectionManager: CollectionManager,
 ): Handler {
-    override val invoker = CommandInvoker(io)
+    override val invoker = CommandInvoker(this)
     override val inputReader = InputReader(this)
 
 
