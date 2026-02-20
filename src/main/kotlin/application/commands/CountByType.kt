@@ -10,11 +10,12 @@ class CountByType (
     override val description = "Подсчитывает количество организаций заданного типа"
 
     override fun execute(argument: String) {
-        val waitIsItTrue = OrganizationType.entries.any{ it.toString() == argument }
+        val neatArgument = argument.uppercase().trim().replace(" ", "_")
+        val waitIsItTrue = OrganizationType.entries.any{ it.toString() == neatArgument }
         val collectionManager = app.collectionManager
 
         if (waitIsItTrue){
-            val count = collectionManager.countType(OrganizationType.valueOf(argument))
+            val count = collectionManager.countType(OrganizationType.valueOf(neatArgument))
 
             app.io.printLine("Количество организаций такого типа: $count")
         }
