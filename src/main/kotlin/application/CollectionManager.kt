@@ -9,24 +9,13 @@ class CollectionManager(
     private val organizationCollection : ArrayDeque<Organization>,
 ) : OrganizationRepository {
 
-    private var currentID: Int = -1
+    private var currentID: Int = 0
 
     fun generateNewID() : Int{
-        if (currentID == -1) {
-            if (organizationCollection.isEmpty()) {
-                currentID = 1
-                return 1
-            }
-            val maxID = organizationCollection.maxOf { it.id }
-            currentID = maxID + 1
-
-            return maxID + 1
-        }
-        currentID += 1
-        return currentID
+        return ++currentID
     }
 
-    fun checkFullNameUnique(fullName: String) : Boolean = organizationCollection.find { it.fullName == fullName } != null
+    fun checkFullNameUnique(fullName: String) : Boolean = organizationCollection.any { it.fullName == fullName }
 
     fun clear() {
         organizationCollection.clear()
@@ -55,7 +44,7 @@ class CollectionManager(
     }
 
     override fun removeById(id: Int) {
-        organizationCollection.removeIf({ organization -> organization.id == id })
+        organizationCollection.removeIf{ organization -> organization.id == id }
     }
 
 }
