@@ -10,8 +10,10 @@ class Add(
     override val name: String = "add"
 
     override fun execute(argument: String) {
+        val collectionManager = app.collectionManager
         val org: Organization = app.inputReader.readOrganization(app.collectionManager, false)
-        app.collectionManager.add(org)
+
+        collectionManager.add(org)
         app.io.printLine("Организация '${org.name}' успешно добавлена.")
     }
 

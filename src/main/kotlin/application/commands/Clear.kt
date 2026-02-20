@@ -9,8 +9,10 @@ class Clear (
     override val description = "Очищает коллекцию"
 
     override fun execute(argument: String) {
-        if (app.collectionManager.getCollection().isNotEmpty()) {
-            app.collectionManager.clear()
+        val collectionManager = app.collectionManager
+
+        if (collectionManager.getCollection().isNotEmpty()) {
+            collectionManager.clear()
             app.io.printLine("Коллекция была успешно очищена")
         }
         else{
