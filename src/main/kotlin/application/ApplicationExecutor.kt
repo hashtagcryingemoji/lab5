@@ -58,7 +58,7 @@ class ApplicationExecutor(
             registerCommand(exit)
             registerCommand(history)
         }
-
+        io.printLine("Добро пожаловать в Imop 1.0.\nВведите 'help', чтобы ознакомиться сос списком доступных команд.")
         while (true) {
             try {
                 val line = io.readLine() ?: break

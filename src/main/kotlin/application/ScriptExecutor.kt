@@ -1,6 +1,7 @@
 package application
 
 import application.commands.*
+import application.exceptions.WrongArgumentException
 
 class ScriptExecutor(
     val app: Handler,
@@ -15,8 +16,8 @@ class ScriptExecutor(
     override val inputReader = InputReader(this)
     override val storageGateway = app.storageGateway
     override val logsManager = app.logsManager
-
     override fun handleError(e: Exception) {
+
         throw e
     }
 
@@ -61,7 +62,11 @@ class ScriptExecutor(
             val line = io.readLine() ?: break
             if (line.isBlank()) continue
             logsManager.add("script: $line")
-            invoker.handleInput(line)
+            try {
+                invoker.handleInput(line)
+            } catch (e: WrongArgumentException) {
+                throw WrongArgumentException("Ошибка чтения скрипта")
+            }
         }
     }
 }
