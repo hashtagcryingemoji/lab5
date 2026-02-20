@@ -7,16 +7,18 @@ plugins {
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
+var serializationVersion = "0.90.0"
+var mockkVersion = "1.13.10"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+    testImplementation("io.mockk:mockk:${mockkVersion}")
     implementation(kotlin("stdlib-jdk8"))
-    implementation("io.github.pdvrieze.xmlutil:core:0.90.0")
-    implementation("io.github.pdvrieze.xmlutil:serialization:0.90.0")
+    implementation("io.github.pdvrieze.xmlutil:core:${serializationVersion}")
+    implementation("io.github.pdvrieze.xmlutil:serialization:${serializationVersion}")
 }
 
 application {
@@ -25,8 +27,4 @@ application {
 
 kotlin {
     jvmToolchain(17)
-}
-
-tasks.register("helloTask"){
-    println("hello")
 }
