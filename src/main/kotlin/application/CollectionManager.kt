@@ -4,12 +4,14 @@ import domain.Address
 import domain.Organization
 import domain.OrganizationRepository
 import domain.OrganizationType
+import java.time.LocalDate
 
 class CollectionManager(
     private val organizationCollection : ArrayDeque<Organization>,
 ) : OrganizationRepository {
 
     private var currentID: Int = if (organizationCollection.isNotEmpty()) organizationCollection.maxOf { it.id } else 0
+    private var initDate = LocalDate.now()
 
     fun generateNewID() : Int{
         return ++currentID
@@ -31,10 +33,19 @@ class CollectionManager(
 
     fun removeGreater(organization: Organization) = organizationCollection.removeIf { it > organization}
 
+    fun countGreater(organization: Organization) = organizationCollection.count { it > organization}
+
     fun removeLower(organization: Organization) = organizationCollection.removeIf { it < organization}
 
+    fun countLower(organization: Organization) = organizationCollection.removeIf { it < organization}
+
+    fun getInitializationDate(): String{
+        return if (organizationCollection.isEmpty()) "Коллекция еще не создана"
+        else initDate.toString()
+    }
 
     override fun add(organization: Organization) {
+        if (organizationCollection.isEmpty()) initDate = LocalDate.now()
         organizationCollection.addLast(organization)
     }
 
