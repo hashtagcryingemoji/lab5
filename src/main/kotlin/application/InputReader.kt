@@ -11,23 +11,23 @@ class InputReader(val app: Handler) {
 
     fun readOrganization(collectionManager: CollectionManager, isFromScript: Boolean): Organization {
         val id = collectionManager.generateNewID()
-        val name = readName("Введите название организации:", false, isFromScript)
-        val x = readFloatMax("X (max 547)", 547f, false, isFromScript)!!
-        val y = readFloat("Y", false, isFromScript)!!
-        val turnover: Float = readFloatMin("Оборот (>0)",0f, false, isFromScript)!!
+        val name = readName("Введите название организации:", false)
+        val x = readFloatMax("X (max 547)",false, 547f)!!
+        val y = readFloat("Y", false)!!
+        val turnover: Float = readFloatMin("Оборот (>0)", false, 0f)!!
         var fullName: String
 
         while (true) {
             fullName = readString("Полное имя (уникальное)", false)!!
-            if (!collectionManager.checkFullNameUnique(fullName)) break
+            if (!collectionManager.checkFullNameUnique(fullName) && fullName.isNotBlank()) break
             handleError(WrongArgumentException("Это имя уже занято."))
 
         }
 
-        val empCount = readLongMin("Сотрудники",0L, true, isFromScript)!!
+        val empCount = readLongMin("Сотрудники",true, 0L)
         val type = readEnum("Тип (commercial, public, government, private limited company, open joint stock company", false, isFromScript)
-        val street = readString("Улица", true)!!
-        val zip = readString("Индекс", true)!!
+        val street = readString("Улица", true)
+        val zip = readString("Индекс", true)
 
         return Organization(
             id, name, Coordinates(x, y),
@@ -42,120 +42,85 @@ class InputReader(val app: Handler) {
         if (!nullable) {
             while (true) {
                 printLine("$p: ")
-
                 val s: String = readLine()?.trim() ?: ""
-
                 return s
             }
         }
         else {
             while (true) {
                 printLine("$p или нажмите Enter, чтобы оставить поле пустым: ")
-
-                val s: String = readLine()?.trim() ?: ""
-                if (s.isEmpty()) return null
-                return s
+                val s: String? = readLine()
+                return if (!s.isNullOrBlank()) s.trim()
+                else null
             }
-
         }
     }
-    private fun readName(p: String, nullable: Boolean, isFromScript: Boolean): String {
-        var s = readString(p, nullable)
-        return if (s != "" && s != null) s.trim()
+    private fun readName(p: String, nullable: Boolean): String {
+        val s = readString(p, nullable)
+        return if (s != null && s != "") s.trim()
         else {
-            handleError(WrongArgumentException("Название не может быть пустым. Попробуйте ещё раз:"))
-            readName(p, nullable, isFromScript)
-            }
-
+            handleError(WrongArgumentException("Название не может быть пустым"))
+            readName(p, nullable)
+        }
     }
-    private fun readLong(p: String, nullable: Boolean, isFromScript: Boolean): Long? {
+
+    private fun readLong(p: String, nullable: Boolean): Long? {
         var s = readString(p, nullable)
         if (s != null) {
             val parsedLong: Long? = s.toLongOrNull()
             return if (parsedLong != null) parsedLong
             else {
-                handleError(WrongArgumentException("Это не число, попробуйте ещё раз:"))
-                readLong(p, nullable, isFromScript)
+                handleError(WrongArgumentException("$parsedLong - не число."))
+                readLong(p, nullable)
             }
         }
         return null
     }
 
     //Нижняя граница
-    private fun readLongMin(p: String, min: Long, nullable: Boolean, isFromScript: Boolean): Long? {
-        var s = readString(p, nullable)
-        if (s != null) {
-            val parsedLong: Long? = s.toLongOrNull()
-            return if (parsedLong != null)
-                if (parsedLong > min) parsedLong
-                else {
-                    handleError(WrongArgumentException("Количество сотрудников должно быть больше 0. Попробуйте еще раз"))
-                    readLongMin(p, min, nullable, isFromScript)
-                }
-            else {
-                handleError(WrongArgumentException("Это не число! Попробуйте ещё раз:"))
-                readLong(p, nullable,  isFromScript)
-            }
+    private fun readLongMin(p: String, nullable: Boolean, min: Long): Long? {
+        var parsedLong = readLong(p, nullable)
+        return if (parsedLong != null && parsedLong >= min) parsedLong
+        else if (parsedLong != null) {
+            handleError(WrongArgumentException("Число $parsedLong больше возможного."))
+            readLongMin(p, nullable, min)
         }
-        return null
+        else null
     }
 
-
-
-private fun readFloat(p: String, nullable: Boolean, isFromScript: Boolean): Float? {
+private fun readFloat(p: String, nullable: Boolean): Float? {
         var s = readString(p, nullable)
         if (s != null) {
             val parsedFloat: Float? = s.toFloatOrNull()
              return if (parsedFloat != null) parsedFloat
             else {
-                handleError(WrongArgumentException("Это не число! Попробуйте ещё раз:"))
-                 readFloat(p, nullable, isFromScript)
+                 handleError(WrongArgumentException("Это не число! Попробуйте ещё раз:"))
+                 readFloat(p, nullable)
             }
         }
         return null
     }
     //Только верхняя граница
-    private fun readFloatMax(p: String, max: Float, nullable: Boolean, isFromScript: Boolean): Float? {
-        var s = readString(p, nullable)
-        if (s != null) {
-            val parsedFloat: Float? = s.toFloatOrNull()
-            return if (parsedFloat != null) {
-                if (parsedFloat > max) {
-                    handleError(WrongArgumentException("Число больше $max! Попробуйте другое:"))
-                    readFloatMax(p, max, nullable, isFromScript)
-                }
-                parsedFloat
+    private fun readFloatMax(p: String , nullable: Boolean, max: Float): Float? {
+        var parsedFloat = readFloat(p, nullable)
+            return if (parsedFloat != null && parsedFloat <= max) parsedFloat
+            else if (parsedFloat != null) {
+                handleError(WrongArgumentException("Число $parsedFloat больше возможного."))
+                readFloatMax(p, nullable, max)
             }
-            else {
-                handleError(WrongArgumentException("Это не число! Попробуйте ещё раз:"))
-                readFloatMax(p, max, nullable, isFromScript)
-
-            }
-        }
-        return null
+            else null
     }
     //Только нижняя граница
-    private fun readFloatMin(p: String, min: Float, nullable: Boolean, isFromScript: Boolean): Float? {
-        var s = readString(p, nullable)
-        if (s != null) {
-            val parsedFloat: Float? = s.toFloatOrNull()
-            return if (parsedFloat != null) {
-                if (parsedFloat < min) {
-                    handleError(WrongArgumentException("Число меньше $min! Попробуйте другое:"))
-                    readFloatMin(p, min, nullable, isFromScript)
-                }
-                parsedFloat
-
-            }
-            else {
-
-
-                handleError(WrongArgumentException("Это не число! Попробуйте ещё раз:"))
-                readFloatMin(p, min,  nullable, isFromScript)
-            }
+    private fun readFloatMin(p: String, nullable: Boolean, min: Float): Float? {
+        var parsedFloat = readFloat(p, nullable)
+        return if (parsedFloat != null && parsedFloat >= min) parsedFloat
+        else if (parsedFloat != null) {
+            handleError(WrongArgumentException("Число $parsedFloat меньше возможного."))
+            readFloatMin(p, nullable, min)
         }
-        return null
+        else null
     }
+
     private fun readEnum(p: String, nullable: Boolean, isFromScript: Boolean): OrganizationType {
 
         val s: String = readString(p, nullable)!!
@@ -167,7 +132,7 @@ private fun readFloat(p: String, nullable: Boolean, isFromScript: Boolean): Floa
             "private limited company" -> OrganizationType.PRIVATE_LIMITED_COMPANY
             "open joint stock company" -> OrganizationType.OPEN_JOINT_STOCK_COMPANY
             else -> {
-                handleError(WrongArgumentException("Попробуйте еще раз:"))
+                handleError(WrongArgumentException("Введён неккоректный формат типа организации"))
                 readEnum(p, nullable, isFromScript)
             }
         }
