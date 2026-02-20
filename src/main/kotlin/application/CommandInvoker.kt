@@ -16,11 +16,8 @@ class CommandInvoker(private val ioPort: IOPort) {
         val command = commands[commandName]
 
         if (command != null) {
-            try {
-                command.execute(argument)
-            } catch (e: Exception) {
-                ioPort.printLine(e.message)
-            }
+            command.execute(argument)
+
         } else {
             ioPort.printLine("Команда '$commandName' не найдена. Введите 'help, чтобы ознакомиться со списком доступных команд.")
 
