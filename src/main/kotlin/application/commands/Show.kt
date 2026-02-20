@@ -11,7 +11,7 @@ class Show(
 
     override fun execute(argument: String) {
         val collectionManager = app.collectionManager
-
-        io.printLine(collectionManager.getCollection().toString())
+        if (collectionManager.getCollection().isEmpty()) io.printLine("Вы еще не успели насоздавать шедевров...")
+        collectionManager.getCollection().forEach { println(it) }
     }
 }

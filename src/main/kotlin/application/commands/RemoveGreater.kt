@@ -14,7 +14,7 @@ class RemoveGreater (
         val inputReader = app.inputReader
         val io = app.io
 
-        val org: Organization = inputReader.readOrganization(collectionManager, false)
+        val org: Organization = inputReader.readOrganization(collectionManager)
         val count = collectionManager.countGreater(org)
 
         collectionManager.removeGreater(org)

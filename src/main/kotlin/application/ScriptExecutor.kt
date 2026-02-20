@@ -1,11 +1,12 @@
 package application
 
 import application.commands.*
+import application.exceptions.EndlessRecursionException
 import application.exceptions.WrongArgumentException
 
 class ScriptExecutor(
     val app: Handler,
-    pathName: String
+    val pathName: String,
 ): Handler {
     init {
         println("Executing script $pathName")
@@ -16,12 +17,14 @@ class ScriptExecutor(
     override val inputReader = InputReader(this)
     override val storageGateway = app.storageGateway
     override val logsManager = app.logsManager
+    override val setOfPaths: MutableSet<String> = app.setOfPaths
     override fun handleError(e: Exception) {
-
         throw e
     }
 
     override fun run() {
+        if (!setOfPaths.add(io.getCurrentPath())) throw EndlessRecursionException("Обнаружена бесконечная рекурсия скриптов: $pathName")
+
         val add = Add(this)
         val executeScript = ExecuteScript(this)
         val show = Show(this)
@@ -57,16 +60,20 @@ class ScriptExecutor(
             registerCommand(exit)
             registerCommand(history)
         }
-
-        while (true) {
-            val line = io.readLine() ?: break
-            if (line.isBlank()) continue
-            logsManager.add("script: $line")
-            try {
-                invoker.handleInput(line)
-            } catch (e: WrongArgumentException) {
-                throw WrongArgumentException("Ошибка чтения скрипта")
+        try {
+            while (true) {
+                val line = io.readLine() ?: break
+                if (line.isBlank()) continue
+                logsManager.add("script: $line")
+                try {
+                    invoker.handleInput(line)
+                } catch (e: WrongArgumentException) {
+                    throw WrongArgumentException("Ошибка чтения скрипта")
+                }
             }
+        } finally {
+            io.printLine("Скрипт $pathName выполнился успешно.")
+            setOfPaths.remove(io.getCurrentPath())
         }
     }
 }

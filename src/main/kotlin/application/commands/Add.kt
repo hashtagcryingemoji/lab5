@@ -13,7 +13,7 @@ class Add(
         val collectionManager = app.collectionManager
         val io = app.io
         val inputReader = app.inputReader
-        val org: Organization = inputReader.readOrganization(collectionManager, false)
+        val org: Organization = inputReader.readOrganization(collectionManager)
 
         collectionManager.add(org)
         io.printLine("Организация '${org.name}' успешно добавлена.")

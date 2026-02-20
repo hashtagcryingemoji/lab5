@@ -14,7 +14,7 @@ class RemoveLower (
         val inputReader = app.inputReader
         val io = app.io
 
-        val org: Organization = inputReader.readOrganization(collectionManager, false)
+        val org: Organization = inputReader.readOrganization(collectionManager)
         val count = collectionManager.countLower(org)
 
         collectionManager.removeLower(org)

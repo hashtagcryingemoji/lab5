@@ -1,10 +1,12 @@
 package application
 
 import application.commands.*
+import application.exceptions.EmptyArgumentException
+import application.exceptions.EndlessRecursionException
 import application.exceptions.WrongArgumentException
 import data.StorageManager
-import domain.Organization
-import java.io.EOFException
+import java.io.FileNotFoundException
+import kotlin.system.exitProcess
 
 class ApplicationExecutor(
     override val io: IOPort,
@@ -13,12 +15,15 @@ class ApplicationExecutor(
     override val invoker = CommandInvoker(this)
     override val inputReader = InputReader(this)
     override val storageGateway: StorageManager = StorageManager()
+    private val collection = storageGateway.downloadCollection(pathToFile)
 
-    private val collection = ArrayDeque<Organization>()
     override val collectionManager = CollectionManager(collection)
-
+    override val setOfPaths: MutableSet<String> = mutableSetOf<String>()
     override val logsManager = HistoryManager()
     override fun handleError(e: Exception) {
+        if (e is EmptyArgumentException) {
+            throw e
+        }
         io.printLine(e.message)
     }
 
@@ -58,26 +63,45 @@ class ApplicationExecutor(
             registerCommand(exit)
             registerCommand(history)
         }
-        io.printLine("Добро пожаловать в Imop 1.0.\nВведите 'help', чтобы ознакомиться сос списком доступных команд.")
+        io.printLine("Добро пожаловать в Imop 1.0.\nВведите 'help', чтобы ознакомиться со списком доступных команд.")
         while (true) {
             try {
+                setOfPaths.clear()
                 val line = io.readLine() ?: break
-
                 if (line.isBlank()) continue
 
-                try {
-                    invoker.handleInput(line)
-                    logsManager.add(line)
-                } catch (e: WrongArgumentException){
-                    io.printLine(e.message)
-                    continue
-                }
-
+                invoker.handleInput(line)
+                logsManager.add(line)
             }
-            catch (e: EOFException) {
-                io.printLine(e.message)
-                io.printLine("Скрипт завершееен")
+            catch (e: SecurityException){
+                io.printLine("Нет прав для чтения файла =(")
                 continue
+            }
+            catch (e: FileNotFoundException)
+            {
+                io.printLine("Похоже, что такого файла ('${e.message}') вовсе не существовало...")
+            }
+            catch (e: WrongArgumentException){
+                io.printLine(e.message)
+                continue
+            }
+            catch (e: EmptyArgumentException){
+                io.printLine(e.message)
+                continue
+            }
+            catch (e: EndlessRecursionException) {
+                io.printLine(e.message)
+                setOfPaths.clear()
+                continue
+            }
+            catch (e: NumberFormatException){
+                io.printLine(e.message)
+                continue
+            }
+            catch (e: Throwable) {
+                storageGateway.uploadCollection(collection, ".ErrorSaveFile.xml")
+                io.printLine("Непредвиденная ошибка. Список организаций был сохранен в .ErrorSaveFile")
+                exitProcess(1)
             }
         }
     }

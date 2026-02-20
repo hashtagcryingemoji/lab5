@@ -11,10 +11,6 @@ class History (
     override fun execute(argument: String) {
         val historyManager = app.logsManager
         val history = historyManager.getLogs()
-
-
-        for (command in history){
-            println(command)
-        }
+        history.forEach { app.io.printLine(it) } //рефакторинг =)
     }
 }

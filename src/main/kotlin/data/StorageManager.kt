@@ -9,7 +9,9 @@ import kotlin.collections.ArrayDeque
 
 class StorageManager: StorageGateway {
     override fun downloadCollection(fileName: String): ArrayDeque<Organization> {
+        if (fileName.isEmpty()) return ArrayDeque()
         val file = File(fileName)
+        if (!file.exists()) return ArrayDeque()
         var res = ""
         val sc = Scanner(file)
 

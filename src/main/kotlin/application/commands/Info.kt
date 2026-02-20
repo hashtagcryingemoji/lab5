@@ -24,9 +24,7 @@ class Info (
 
             io.printLine("Организации в коллекции:")
 
-            for (organization in collect){
-                io.printLine("${organization.fullName} с id номер ${organization.id}")
-            }
+            collect.forEach { io.printLine("${it.fullName} с id номер ${it.id}")} //небольшой попутный рефакторинг, нужно отвыкать от джава
         }
 
     }

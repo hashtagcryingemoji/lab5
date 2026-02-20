@@ -10,8 +10,6 @@ class Help (
 
     override fun execute(argument: String) {
         val commandCollection = app.invoker.getCommands()
-        for (command in commandCollection){
-            println("${command.name} - ${command.description}")
-        }
+        commandCollection.forEach { app.io.printLine("${it.name} - ${it.description}") }
     }
 }

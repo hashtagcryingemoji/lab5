@@ -9,7 +9,7 @@ class InputReader(val app: Handler) {
     fun printLine(message: String) = app.io.printLine(message)
     fun handleError(e: Exception) = app.handleError(e)
 
-    fun readOrganization(collectionManager: CollectionManager, isFromScript: Boolean): Organization {
+    fun readOrganization(collectionManager: CollectionManager): Organization {
         val id = collectionManager.generateNewID()
         val name = readName("Введите название организации:", false)
         val x = readFloatMax("X (max 547)",false, 547f)!!
@@ -23,8 +23,8 @@ class InputReader(val app: Handler) {
             handleError(WrongArgumentException("Это имя уже занято."))
         }
 
-        val empCount = readLongMin("Сотрудники",true, 0L)
-        val type = readEnum("Тип (commercial, public, government, private limited company, open joint stock company", false, isFromScript)
+        val empCount = readLongMin("Сотрудники",true, 1L)
+        val type = readEnum("Тип (commercial, public, government, private limited company, open joint stock company", false)
         val street = readString("Улица", true)
         val zip = readString("Индекс", true)
 
@@ -120,7 +120,7 @@ class InputReader(val app: Handler) {
         else null
     }
 
-    private fun readEnum(p: String, nullable: Boolean, isFromScript: Boolean): OrganizationType {
+    private fun readEnum(p: String, nullable: Boolean): OrganizationType {
 
         val s: String = readString(p, nullable)!!
 
@@ -132,7 +132,7 @@ class InputReader(val app: Handler) {
             "open joint stock company" -> OrganizationType.OPEN_JOINT_STOCK_COMPANY
             else -> {
                 handleError(WrongArgumentException("Введён неккоректный формат типа организации"))
-                readEnum(p, nullable, isFromScript)
+                readEnum(p, nullable)
             }
         }
     }

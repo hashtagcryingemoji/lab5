@@ -8,6 +8,7 @@ interface Handler {
     val collectionManager: CollectionManager
     val storageGateway: StorageGateway
     val logsManager: Logger
+    val setOfPaths: MutableSet<String>
 
     fun handleError(e: Exception)
     fun run()

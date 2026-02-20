@@ -1,6 +1,7 @@
 package application.commands
 
 import application.Handler
+import application.exceptions.WrongArgumentException
 import domain.Organization
 
 class Update (
@@ -12,8 +13,14 @@ class Update (
     override fun execute(argument: String) {
         val collectionManager = app.collectionManager
         val inputReader = app.inputReader
-        val org: Organization = inputReader.readOrganization(collectionManager, false)
-        val id = argument.toInt()
+        val id: Int
+        try {
+            id = argument.toInt()
+        }
+        catch (e: Throwable) {
+            throw WrongArgumentException("Неверный формат аргумента.")
+        }
+        val org: Organization = inputReader.readOrganization(collectionManager)
 
         collectionManager.updateById(id, org)
     }

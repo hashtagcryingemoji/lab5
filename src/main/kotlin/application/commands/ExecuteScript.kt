@@ -10,6 +10,7 @@ class ExecuteScript(
     override val name = "execute_script"
     override val description = "Исполняет скрипты"
     override fun execute(argument: String) {
+
         if (argument.isBlank()) app.handleError(EmptyArgumentException("Путь к файлу не указан"))
         val scriptExecutor = ScriptExecutor(app, argument)
         scriptExecutor.run()
