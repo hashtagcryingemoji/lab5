@@ -19,6 +19,12 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("io.github.pdvrieze.xmlutil:core:${serializationVersion}")
     implementation("io.github.pdvrieze.xmlutil:serialization:${serializationVersion}")
+    implementation("io.github.pdvrieze.xmlutil:serialization:${serializationVersion}")
+    implementation("io.github.pdvrieze.xmlutil:serialization:${serializationVersion}")
+    implementation("org.apache.logging.log4j:log4j-api-kotlin:1.5.0")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.25.3")
+
 }
 
 application {

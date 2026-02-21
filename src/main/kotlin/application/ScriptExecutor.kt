@@ -3,6 +3,7 @@ package application
 import application.commands.*
 import application.exceptions.EndlessRecursionException
 import application.exceptions.WrongArgumentException
+import org.apache.logging.log4j.kotlin.logger
 
 class ScriptExecutor(
     val app: Handler,
@@ -68,8 +69,11 @@ class ScriptExecutor(
                 if (line.isBlank()) continue
                 logsManager.add("script: $line")
                 try {
+                    if (line.isNotBlank()) logger.info(line)
                     invoker.handleInput(line)
                 } catch (e: WrongArgumentException) {
+                    logger.warn(e.message)
+                    logger.warn("Ошибка чтения скрипта $pathName")
                     throw WrongArgumentException("Ошибка чтения скрипта")
                 }
             }
