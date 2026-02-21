@@ -55,7 +55,7 @@ class InputReader(val app: Handler) {
                 printLine("$p или нажмите Enter, чтобы оставить поле пустым: ")
                 app.io.printBefore("> ")
                 val s: String? = readLine()
-                logger.info(s ?: "")
+                logger.info(s ?: "null")
                 return if (!s.isNullOrBlank()) s.trim()
                 else null
             }
