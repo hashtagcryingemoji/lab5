@@ -14,17 +14,17 @@ class InputReader(val app: Handler) {
         val name = readName("Введите название организации:", false)
         val x = readFloatMax("X (max 547)",false, 547f)!!
         val y = readFloat("Y", false)!!
-        val turnover: Float = readFloatMin("Оборот (>0)", false, 0f)!!
+        val turnover: Float = readFloatMin("Оборот (>0)", false, 1f)!!
         var fullName: String
 
         while (true) {
-            fullName = readString("Полное имя (уникальное)", false)!!
+            fullName = readString("Полное имя (уникальное):", false)!!
             if (!collectionManager.checkFullNameUnique(fullName) && fullName.isNotBlank()) break
             handleError(WrongArgumentException("Это имя уже занято."))
         }
 
         val empCount = readLongMin("Сотрудники",true, 1L)
-        val type = readEnum("Тип (commercial, public, government, private limited company, open joint stock company", false)
+        val type = readEnum("Тип (commercial, public, government, private limited company, open joint stock company)", false)
         val street = readString("Улица", true)
         val zip = readString("Индекс", true)
 
@@ -38,9 +38,11 @@ class InputReader(val app: Handler) {
     }
 
     fun readString(p: String, nullable: Boolean): String? {
+
         if (!nullable) {
             while (true) {
                 printLine("$p: ")
+                app.io.printBefore("> ")
                 val s: String = readLine()?.trim() ?: ""
                 return s
             }
@@ -48,6 +50,7 @@ class InputReader(val app: Handler) {
         else {
             while (true) {
                 printLine("$p или нажмите Enter, чтобы оставить поле пустым: ")
+                app.io.printBefore("> ")
                 val s: String? = readLine()
                 return if (!s.isNullOrBlank()) s.trim()
                 else null

@@ -9,12 +9,14 @@ class CliManager: IOPort {
     override fun printLine(message: Any?) {
         println(message)
     }
-
+    override fun printBefore(message: Any?) {
+        print(message)
+    }
     override fun readLine(): String? {
         return if (scanner.hasNextLine()) scanner.nextLine()
         else {
             scanner.close()
-            null
+            ""
         }
 
     }

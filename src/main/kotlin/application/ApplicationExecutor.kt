@@ -3,6 +3,7 @@ package application
 import application.commands.*
 import application.exceptions.EmptyArgumentException
 import application.exceptions.EndlessRecursionException
+import application.exceptions.ScriptInterruptedWhileReadingException
 import application.exceptions.WrongArgumentException
 import data.StorageManager
 import java.io.FileNotFoundException
@@ -66,6 +67,7 @@ class ApplicationExecutor(
         io.printLine("Добро пожаловать в Imop 1.0.\nВведите 'help', чтобы ознакомиться со списком доступных команд.")
         while (true) {
             try {
+                io.printBefore("> ")
                 setOfPaths.clear()
                 val line = io.readLine() ?: break
                 if (line.isBlank()) continue
@@ -96,6 +98,15 @@ class ApplicationExecutor(
             }
             catch (e: NumberFormatException){
                 io.printLine(e.message)
+                continue
+            }
+            catch (e: NoSuchElementException) {
+                io.printLine(e.message)
+                continue
+            }
+            catch (e: ScriptInterruptedWhileReadingException){
+                io.printLine("Кажется скрипт заполнен не до конца...")
+                setOfPaths.clear()
                 continue
             }
             catch (e: Throwable) {

@@ -1,5 +1,6 @@
 package application
 
+import application.exceptions.ScriptInterruptedWhileReadingException
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.Scanner
@@ -12,11 +13,18 @@ class ScriptReader(pathname: String) : IOPort {
             throw FileNotFoundException(pathname)
         }
     }
+
+    override fun printBefore(message: Any?) {
+    }
     override fun readLine(): String? {
-        return if (scanner.hasNextLine()) scanner.nextLine()
-        else {
-            scanner.close()
-            null
+        try {
+            return if (scanner.hasNextLine()) scanner.nextLine()
+            else {
+                scanner.close()
+                null
+            }
+        } catch (e: IllegalStateException){
+            throw ScriptInterruptedWhileReadingException("Кажется скрипт ${file.absolutePath} заполнен не до конца...")
         }
     }
 
