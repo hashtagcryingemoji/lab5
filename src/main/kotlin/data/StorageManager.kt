@@ -40,6 +40,7 @@ class StorageManager(val app: Handler): StorageGateway {
         val fileWriter = FileWriter(file)
 
         fileWriter.write(content)
+        app.io.printLine("Коллекция успешно сохранена в файл $fileName")
         fileWriter.flush()
     }
 }
