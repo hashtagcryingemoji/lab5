@@ -11,6 +11,8 @@ class ScriptExecutor(
     init {
         println("Executing script $pathName")
     }
+
+    override val initialPath = app.initialPath
     override val io = ScriptReader(pathName)
     override val collectionManager = app.collectionManager
     override val invoker = CommandInvoker(this)

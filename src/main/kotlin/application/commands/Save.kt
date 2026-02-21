@@ -7,11 +7,11 @@ class Save(
 ): Command {
     override val name = "save"
     override val description = "Сохраняет коллекцию в файл"
-
+    val arg = app.initialPath
     override fun execute(argument: String) {
         val storageManager = app.storageGateway
         val collection = app.collectionManager.getCollection()
-
-        storageManager.uploadCollection(ArrayDeque(collection), argument)
+        if (!argument.isBlank()) storageManager.uploadCollection(ArrayDeque(collection), argument)
+        else storageManager.uploadCollection(ArrayDeque(collection), arg)
     }
 }

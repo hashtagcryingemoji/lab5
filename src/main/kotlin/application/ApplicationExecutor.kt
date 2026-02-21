@@ -11,12 +11,12 @@ import kotlin.system.exitProcess
 
 class ApplicationExecutor(
     override val io: IOPort,
-    pathToFile: String
+    override val initialPath: String
 ): Handler {
     override val invoker = CommandInvoker(this)
     override val inputReader = InputReader(this)
     override val storageGateway: StorageManager = StorageManager(this)
-    private val collection = storageGateway.downloadCollection(pathToFile)
+    private val collection = storageGateway.downloadCollection(initialPath)
 
     override val collectionManager = CollectionManager(collection)
     override val setOfPaths: MutableSet<String> = mutableSetOf<String>()

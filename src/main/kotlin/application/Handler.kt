@@ -9,7 +9,7 @@ interface Handler {
     val storageGateway: StorageGateway
     val logsManager: Logger
     val setOfPaths: MutableSet<String>
-
+    val initialPath: String
     fun handleError(e: Exception)
     fun run()
 
