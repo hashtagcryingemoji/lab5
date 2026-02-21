@@ -14,7 +14,7 @@ class ApplicationExecutor(
 ): Handler {
     override val invoker = CommandInvoker(this)
     override val inputReader = InputReader(this)
-    override val storageGateway: StorageManager = StorageManager()
+    override val storageGateway: StorageManager = StorageManager(this)
     private val collection = storageGateway.downloadCollection(pathToFile)
 
     override val collectionManager = CollectionManager(collection)

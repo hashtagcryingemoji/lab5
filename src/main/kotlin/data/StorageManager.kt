@@ -1,5 +1,6 @@
 package data
 
+import application.Handler
 import application.StorageGateway
 import domain.Organization
 import nl.adaptivity.xmlutil.serialization.XML
@@ -7,11 +8,11 @@ import java.io.*
 import java.util.*
 import kotlin.collections.ArrayDeque
 
-class StorageManager: StorageGateway {
+class StorageManager(val app: Handler): StorageGateway {
     override fun downloadCollection(fileName: String): ArrayDeque<Organization> {
         if (fileName.isEmpty()) return ArrayDeque()
         val file = File(fileName)
-        if (!file.exists()) return ArrayDeque()
+        if (!file.exists())  {app.io.printLine("Файл '$fileName' не найден, коллекция организация не была подгружена :P"); return ArrayDeque()}
         var res = ""
         val sc = Scanner(file)
 
