@@ -1,6 +1,5 @@
 package application
 
-import application.commands.*
 import application.exceptions.EmptyArgumentException
 import application.exceptions.EndlessRecursionException
 import application.exceptions.ScriptInterruptedWhileReadingException
@@ -21,52 +20,20 @@ class ApplicationExecutor(
     private val collection = storageGateway.downloadCollection(initialPath)
 
     override val collectionManager = CollectionManager(collection)
-    override val setOfPaths: MutableSet<String> = mutableSetOf<String>()
+    override val setOfPaths: MutableSet<String> = mutableSetOf()
     override val logsManager = HistoryManager()
     override fun handleError(e: Exception) {
         if (e is EmptyArgumentException) {
             throw e
         }
+        logger.warn(e.message ?: "Неизвестная ошибка")
         io.printLine(e.message)
     }
 
     override fun run() {
-        val add = Add(this)
-        val executeScript = ExecuteScript(this)
-        val show = Show(this)
-        val clear = Clear(this)
-        val countByType = CountByType(this)
-        val help = Help(this)
-        val info = Info(this)
-        val save = Save(this)
-        val sumOfEmployeesCount = SumOfEmployeesCount(this)
-        val countLessThanOfficialAddress = CountLessThanOfficialAddress(this)
-        val removeLower = RemoveLower(this)
-        val removeGreater = RemoveGreater(this)
-        val removeByID = RemoveByID(this)
-        val update = Update(this)
-        val exit = Exit(this)
-        val history = History(this)
 
-        with(invoker) {
-            registerCommand(show)
-            registerCommand(executeScript)
-            registerCommand(add)
-            registerCommand(clear)
-            registerCommand(countByType)
-            registerCommand(help)
-            registerCommand(info)
-            registerCommand(save)
-            registerCommand(sumOfEmployeesCount)
-            registerCommand(countLessThanOfficialAddress)
-            registerCommand(removeLower)
-            registerCommand(removeGreater)
-            registerCommand(removeByID)
-            registerCommand(update)
-            registerCommand(exit)
-            registerCommand(history)
-        }
         io.printLine("Добро пожаловать в Imop 1.0.\nВведите 'help', чтобы ознакомиться со списком доступных команд.")
+
         while (true) {
             try {
                 io.printBefore("> ")

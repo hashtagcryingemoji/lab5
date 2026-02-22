@@ -22,8 +22,7 @@ class InputReader(val app: Handler) {
         while (true) {
             fullName = readString("Полное имя (уникальное):", false)!!
             if (!collectionManager.checkFullNameUnique(fullName) && fullName.isNotBlank()) break
-            logger.warn("Имя $fullName уже занято")
-            handleError(WrongArgumentException("Это имя уже занято."))
+            handleError(WrongArgumentException("Имя $fullName уже занято"))
         }
 
         val empCount = readLongMin("Сотрудники",true, 1L)
@@ -47,6 +46,10 @@ class InputReader(val app: Handler) {
                 printLine("$p: ")
                 app.io.printBefore("> ")
                 val s: String = readLine()?.trim() ?: ""
+
+                if (s == "") logger.info("null")
+                else logger.info(s)
+
                 return s
             }
         }
@@ -55,7 +58,10 @@ class InputReader(val app: Handler) {
                 printLine("$p или нажмите Enter, чтобы оставить поле пустым: ")
                 app.io.printBefore("> ")
                 val s: String? = readLine()
-                logger.info(s ?: "null")
+
+                if (s == "") logger.info("null")
+                else logger.info(s ?: "null")
+
                 return if (!s.isNullOrBlank()) s.trim()
                 else null
             }
@@ -63,13 +69,10 @@ class InputReader(val app: Handler) {
     }
     private fun readName(p: String, nullable: Boolean): String {
 
-
         val s = readString(p, nullable)
 
-        logger.info(s ?: "")
         return if (s != null && s != "") s.trim()
         else {
-            logger.warn("Название не может быть пустым")
             handleError(WrongArgumentException("Название не может быть пустым"))
             readName(p, nullable)
         }
@@ -79,12 +82,10 @@ class InputReader(val app: Handler) {
 
         val s = readString(p, nullable)
 
-        logger.info(s ?: "")
         if (s != null) {
             val parsedLong: Long? = s.toLongOrNull()
             return if (parsedLong != null) parsedLong
             else {
-                logger.warn("$parsedLong - не число.")
                 handleError(WrongArgumentException("$parsedLong - не число."))
                 readLong(p, nullable)
             }
@@ -94,11 +95,10 @@ class InputReader(val app: Handler) {
 
     //Нижняя граница
     private fun readLongMin(p: String, nullable: Boolean, min: Long): Long? {
-
         val parsedLong = readLong(p, nullable)
+
         return if (parsedLong != null && parsedLong >= min) parsedLong
         else if (parsedLong != null) {
-            logger.warn("Число $parsedLong больше возможного")
             handleError(WrongArgumentException("Число $parsedLong больше возможного."))
             readLongMin(p, nullable, min)
         }
@@ -109,13 +109,10 @@ class InputReader(val app: Handler) {
 
         val s = readString(p, nullable)
 
-        logger.info(s ?: "")
-
         if (s != null) {
             val parsedFloat: Float? = s.toFloatOrNull()
              return if (parsedFloat != null) parsedFloat
             else {
-                 logger.warn("Это не число")
                  handleError(WrongArgumentException("Это не число! Попробуйте ещё раз:"))
                  readFloat(p, nullable)
             }
@@ -124,11 +121,11 @@ class InputReader(val app: Handler) {
     }
     //Только верхняя граница
     private fun readFloatMax(p: String , nullable: Boolean, max: Float): Float? {
-
         val parsedFloat = readFloat(p, nullable)
+
+
             return if (parsedFloat != null && parsedFloat <= max) parsedFloat
             else if (parsedFloat != null) {
-                logger.warn("Число $parsedFloat больше возможного")
                 handleError(WrongArgumentException("Число $parsedFloat больше возможного."))
                 readFloatMax(p, nullable, max)
             }
@@ -137,9 +134,10 @@ class InputReader(val app: Handler) {
     //Только нижняя граница
     private fun readFloatMin(p: String, nullable: Boolean, min: Float): Float? {
         val parsedFloat = readFloat(p, nullable)
+
+
         return if (parsedFloat != null && parsedFloat >= min) parsedFloat
         else if (parsedFloat != null) {
-            logger.warn("Число $parsedFloat меньше возможного")
             handleError(WrongArgumentException("Число $parsedFloat меньше возможного."))
             readFloatMin(p, nullable, min)
         }
@@ -147,10 +145,8 @@ class InputReader(val app: Handler) {
     }
 
     private fun readEnum(p: String, nullable: Boolean): OrganizationType {
-
         val s: String = readString(p, nullable)!!
 
-        logger.info(s)
 
         return when (s.lowercase()) {
             "commercial" -> OrganizationType.COMMERCIAL
@@ -159,7 +155,6 @@ class InputReader(val app: Handler) {
             "private limited company" -> OrganizationType.PRIVATE_LIMITED_COMPANY
             "open joint stock company" -> OrganizationType.OPEN_JOINT_STOCK_COMPANY
             else -> {
-                logger.warn("Введён неккоректный формат типа организации")
                 handleError(WrongArgumentException("Введён неккоректный формат типа организации"))
                 readEnum(p, nullable)
             }
