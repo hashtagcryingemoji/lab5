@@ -122,7 +122,7 @@ class UseCaseUnitTests {
         every { io.readLine() } returns "execute_script $pathName" andThen "exit"
         val app = ApplicationExecutor(io, "")
         app.run()
-        verify(exactly = 1) { io.printLine("Похоже, что такого файла ('$pathName (No such file or directory)') вовсе не существовало...") }
+        verify(exactly = 1) { io.printLine("Похоже, что такого файла ($pathName) вовсе не существовало...") }
     }
 
     @Test

@@ -58,7 +58,7 @@ class ApplicationExecutor(
             catch (e: FileNotFoundException)
             {
                 logger.warn(e.message!!)
-                io.printLine("Похоже, что такого файла ('${e.message}') вовсе не существовало...")
+                io.printLine("Похоже, что такого файла (${e.message!!.split(' ')[0]}) вовсе не существовало...")
             }
             catch (e: WrongArgumentException){
                 logger.warn(e.message)
