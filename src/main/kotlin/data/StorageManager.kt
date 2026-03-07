@@ -13,18 +13,25 @@ class StorageManager(val app: Handler): StorageGateway {
         if (fileName.isEmpty()) return ArrayDeque()
         val file = File(fileName)
         if (!file.exists())  {app.io.printLine("Файл '$fileName' не найден, коллекция организация не была подгружена :P"); return ArrayDeque()}
-        var res = ""
         val sc = Scanner(file)
 
+        val sb = StringBuilder()
+
+
+
         while(sc.hasNextLine()){
-            res += sc.nextLine()
+            sb.append(sc.nextLine())
         }
+
+        val res = sb.toString()
 
         val decode = XML.decodeFromString(OrganizationsContainer.serializer(), res)
         val collection = decode
             .organizations
             .map(OrganizationDTO::toDomain)
             .toList()
+
+
 
         return ArrayDeque(collection)
     }
@@ -41,6 +48,6 @@ class StorageManager(val app: Handler): StorageGateway {
 
         fileWriter.write(content)
         app.io.printLine("Коллекция успешно сохранена в файл $fileName")
-        fileWriter.flush()
+        fileWriter.close()
     }
 }
