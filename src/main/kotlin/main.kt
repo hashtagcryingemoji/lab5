@@ -4,5 +4,37 @@ import ui.CliManager
 fun main(args: Array<String>) {
     val cliManager = CliManager()
     val app = ApplicationExecutor(cliManager, args.getOrNull(0) ?: "")
+    if (Math.random() > 0.9) idk()
     app.run()
+}
+
+fun idk() {
+    val msg = """                                                                                                                                                                                         
+                                                                                                                                                                                          
+PPPPPPPPPPPPPPPPP                            444444444                                              tttt                                                                                  
+P::::::::::::::::P                          4::::::::4                                           ttt:::t                                                                                  
+P::::::PPPPPP:::::P                        4:::::::::4                                           t:::::t                                                                                  
+PP:::::P     P:::::P                      4::::44::::4                                           t:::::t                                                                                  
+  P::::P     P:::::P  eeeeeeeeeeee       4::::4 4::::4    aaaaaaaaaaaaa  nnnn  nnnnnnnn    ttttttt:::::tttttttwwwwwww           wwwww           wwwwwwwaaaaaaaaaaaaa     qqqqqqqqq   qqqqq
+  P::::P     P:::::Pee::::::::::::ee    4::::4  4::::4    a::::::::::::a n:::nn::::::::nn  t:::::::::::::::::t w:::::w         w:::::w         w:::::w a::::::::::::a   q:::::::::qqq::::q
+  P::::PPPPPP:::::Pe::::::eeeee:::::ee 4::::4   4::::4    aaaaaaaaa:::::an::::::::::::::nn t:::::::::::::::::t  w:::::w       w:::::::w       w:::::w  aaaaaaaaa:::::a q:::::::::::::::::q
+  P:::::::::::::PPe::::::e     e:::::e4::::444444::::444           a::::ann:::::::::::::::ntttttt:::::::tttttt   w:::::w     w:::::::::w     w:::::w            a::::aq::::::qqqqq::::::qq
+  P::::PPPPPPPPP  e:::::::eeeee::::::e4::::::::::::::::4    aaaaaaa:::::a  n:::::nnnn:::::n      t:::::t          w:::::w   w:::::w:::::w   w:::::w      aaaaaaa:::::aq:::::q     q:::::q 
+  P::::P          e:::::::::::::::::e 4444444444:::::444  aa::::::::::::a  n::::n    n::::n      t:::::t           w:::::w w:::::w w:::::w w:::::w     aa::::::::::::aq:::::q     q:::::q 
+  P::::P          e::::::eeeeeeeeeee            4::::4   a::::aaaa::::::a  n::::n    n::::n      t:::::t            w:::::w:::::w   w:::::w:::::w     a::::aaaa::::::aq:::::q     q:::::q 
+  P::::P          e:::::::e                     4::::4  a::::a    a:::::a  n::::n    n::::n      t:::::t    tttttt   w:::::::::w     w:::::::::w     a::::a    a:::::aq::::::q    q:::::q 
+PP::::::PP        e::::::::e                    4::::4  a::::a    a:::::a  n::::n    n::::n      t::::::tttt:::::t    w:::::::w       w:::::::w      a::::a    a:::::aq:::::::qqqqq:::::q 
+P::::::::P         e::::::::eeeeeeee          44::::::44a:::::aaaa::::::a  n::::n    n::::n      tt::::::::::::::t     w:::::w         w:::::w       a:::::aaaa::::::a q::::::::::::::::q 
+P::::::::P          ee:::::::::::::e          4::::::::4 a::::::::::aa:::a n::::n    n::::n        tt:::::::::::tt      w:::w           w:::w         a::::::::::aa:::a qq::::::::::::::q 
+PPPPPPPPPP            eeeeeeeeeeeeee          4444444444  aaaaaaaaaa  aaaa nnnnnn    nnnnnn          ttttttttttt         www             www           aaaaaaaaaa  aaaa   qqqqqqqq::::::q 
+                                                                                                                                                                                  q:::::q 
+                                                                                                                                                                                  q:::::q 
+                                                                                                                                                                                 q:::::::q
+                                                                                                                                                                                 q:::::::q
+                                                                                                                                                                                 q:::::::q
+                                                                                                                                                                                 qqqqqqqqq
+                                                                                                                                                                                          
+    """.trimIndent()
+
+    println(msg)
 }
